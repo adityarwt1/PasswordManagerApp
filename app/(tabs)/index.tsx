@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
@@ -9,7 +9,7 @@ const index = () => {
   const isDark = theme.dark ? true : false;
   return (
     <SafeAreaView style={styles.mainview}>
-      <View >
+      <View style={styles.loginInput}>
         <Text
           style={[
             styles.text,
@@ -18,6 +18,7 @@ const index = () => {
         >
           SignUp Page
         </Text>
+        <TextInput placeholder="Enter you username..." />
       </View>
     </SafeAreaView>
   );
@@ -34,5 +35,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: 500,
+  },
+  loginInput: {
+    gap: 10,
   },
 });
