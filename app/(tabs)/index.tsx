@@ -5,11 +5,11 @@ import {
   TouchableOpacity,
   Image,
   useColorScheme,
-  ScrollView,
+  RefreshControl,
   FlatList,
   Button,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -41,7 +41,7 @@ const index = () => {
   const [showPasswords, setShowPasswords] = useState<{
     [key: string]: boolean;
   }>({});
-
+   const [refreshing, setRefreshing] = useState(false);
   const loadUserData = async () => {
     try {
       const data = await getUserCredentials();
@@ -169,7 +169,8 @@ const index = () => {
   );
 
   useEffect(() => {
-    loadUserData();
+
+      loadUserData();
   }, []);
 
   const handleCopyPassword = async (text: string) => {
@@ -196,6 +197,12 @@ const index = () => {
       console.log(error)
     }
   }
+    const onRefresh = useCallback(async () => {
+      setRefreshing(true);
+      await loadUserData();
+      setRefreshing(false);
+    }, []);
+
   return (
     <SafeAreaView style={styles.mainview}>
       {/* Banner section */}
@@ -270,6 +277,9 @@ const index = () => {
               keyExtractor={(item) => item._id}
               style={styles.passwordsList}
               showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           ) : (
             <View style={styles.emptyState}>
