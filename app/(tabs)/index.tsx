@@ -149,6 +149,21 @@ const index = () => {
             Copy
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={() => hadleDeletePassoword(item._id)}
+        >
+          <Text
+            style={[
+              styles.toggleText,
+              {
+                color: isDark ? "#ffffff" : "#000000",
+              },
+            ]}
+          >
+            Delete
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -164,6 +179,23 @@ const index = () => {
       console.log((error as Error).message);
     }
   };
+
+  const hadleDeletePassoword = async(id: string)=>{
+    try {
+      const response = await fetch("http://10.192.205.12:3000/api/delete",{
+        method: "DELETE",
+        headers: {
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({_id: id})
+      });
+      if(response.ok){
+        loadUserData()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <SafeAreaView style={styles.mainview}>
       {/* Banner section */}
