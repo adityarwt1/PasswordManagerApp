@@ -28,17 +28,8 @@ const index = () => {
   const loadUserData = async () => {
     try {
       const data = await getUserCredentials();
-
-      setUserData(data);
-      console.log("User data:", data);
-    } catch (error) {
-      console.error("Error loading user data:", error);
-    }
-  };
-  const fetchuserdata = async () => {
-    try {
       const response = await fetch(
-        `http://10.192.205.12:3000/api/fetchPassword?username=${userData?.username}`,
+        `http://10.192.205.12:3000/api/fetchPassword?username=${data?.username}`,
         {
           // Replace xxx with your IP
           method: "POST",
@@ -47,14 +38,15 @@ const index = () => {
           },
         }
       );
-      const data = await response.json();
-      console.log(data);
+      const dataresponse = await response.json();
+      console.log(dataresponse);
+      setUserData(data);
     } catch (error) {
-      console.log(error);
+      console.error("Error loading user data:", error);
     }
   };
+
   useEffect(() => {
-    fetchuserdata();
     loadUserData();
   }, []);
 
