@@ -25,15 +25,28 @@ const index = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
 
+  const loadUserData = async () => {
+    try {
+      const data = await getUserCredentials();
+
+      setUserData(data);
+      console.log("User data:", data);
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    }
+  };
   const fetchuserdata = async () => {
     try {
-      const response = await fetch("http://10.192.205.12:3000/api/hello", {
-        // Replace xxx with your IP
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://10.192.205.12:3000/api/fetchPassword?username=${userData?.username}`,
+        {
+          // Replace xxx with your IP
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = await response.json();
       console.log(data);
     } catch (error) {
@@ -41,17 +54,6 @@ const index = () => {
     }
   };
   useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        const data = await getUserCredentials();
-
-        setUserData(data);
-        console.log("User data:", data);
-        await clearUserCredentials();
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      }
-    };
     fetchuserdata();
     loadUserData();
   }, []);
@@ -101,7 +103,7 @@ const index = () => {
             styles.addPasswordButton,
             { backgroundColor: isDark ? "#334155" : "#1e293b" },
           ]}
-          onPress={() => router.push("/signup")}
+          onPress={() => router.push(userData ? "/add" : "/signup")}
         >
           <Text style={styles.buttonText}>
             {userData ? "Add Password" : "Get Started"}
