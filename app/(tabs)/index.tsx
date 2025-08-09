@@ -13,7 +13,8 @@ import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { clearUserCredentials, getUserCredentials } from "@/utils/Credentials";
+import { getUserCredentials } from "@/utils/Credentials";
+import * as Clipboard from "expo-clipboard";
 
 // Define the user data type
 interface UserData {
@@ -57,7 +58,6 @@ const index = () => {
         const dataresponse = await response.json();
         setPasswords(dataresponse.passwords || []);
         setUserData(data);
-        console.log("Passwords fetched:", dataresponse.passwords);
       }
     } catch (error) {
       console.error("Error loading user data:", error);
@@ -159,7 +159,7 @@ const index = () => {
 
   const handleCopyPassword = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await Clipboard.setStringAsync(text);
     } catch (error) {
       console.log((error as Error).message);
     }
