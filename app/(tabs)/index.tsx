@@ -6,7 +6,7 @@ import {
   Image,
   useColorScheme,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -44,9 +44,9 @@ const index = () => {
         <TouchableOpacity
           style={[
             styles.addPasswordButton,
-            { backgroundColor: isDark ? "#1e293b" : "#334155" },
+            { backgroundColor: isDark ? "#334155" : "#1e293b" },
           ]}
-          onPress={() => router.push("/add")}
+          onPress={() => router.push("/signup")}
         >
           <Text style={styles.buttonText}>Add Password</Text>
         </TouchableOpacity>

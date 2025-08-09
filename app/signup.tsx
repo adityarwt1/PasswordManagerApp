@@ -8,12 +8,20 @@ import {
 import React from "react";
 import Colors from "@/constants/Colors";
 
-const theme = useColorScheme();
-const isDark = theme === "dark" ? true : false;
 const signup = () => {
+  const theme = useColorScheme();
+  const isDark = theme === "dark";
+
   return (
-    <SafeAreaView style={[styles.maindiv]}>
-      <Text>SecuraPass Password Manager</Text>
+    <SafeAreaView style={styles.maindiv}>
+      <Text
+        style={[
+          styles.titleText,
+          { color: isDark ? Colors.dark.text : Colors.light.text },
+        ]}
+      >
+        SecuraPass Password Manager
+      </Text>
     </SafeAreaView>
   );
 };
@@ -25,8 +33,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    fontSize: 30,
-    fontWeight: 500,
-    color: isDark ? Colors.dark.text : Colors.light.text,
+  },
+  titleText: {
+    fontSize: 10,
+    fontWeight: "500",
   },
 });
