@@ -95,6 +95,9 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     flexDirection: "column",
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 8, // optional: adds rounded corners
   },
   title: {
     fontSize: 30,
