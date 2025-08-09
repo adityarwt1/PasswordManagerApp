@@ -7,6 +7,7 @@ import {
   useColorScheme,
   ScrollView,
   FlatList,
+  Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -131,6 +132,21 @@ const index = () => {
             ]}
           >
             {showPasswords[item._id] ? "Hide" : "Show"}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={() => handleCopyPassword(item.password)}
+        >
+          <Text
+            style={[
+              styles.toggleText,
+              {
+                color: isDark ? "#ffffff" : "#000000",
+              },
+            ]}
+          >
+            Copy
           </Text>
         </TouchableOpacity>
       </View>
