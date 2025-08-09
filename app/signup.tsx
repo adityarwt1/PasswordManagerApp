@@ -20,6 +20,7 @@ const signup = () => {
     username: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   console.log(formData);
   return (
     <SafeAreaView style={styles.maindiv}>
@@ -48,19 +49,32 @@ const signup = () => {
           },
         ]}
       />
-      <TextInput
-        placeholder="password..."
-        secureTextEntry={true}
-        value={formData.password}
-        onChangeText={(text) => setFormdata({ ...formData, password: text })}
-        placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
-        style={[
-          styles.inputfield,
-          {
-            color: isDark ? Colors.dark.text : Colors.light.text,
-          },
-        ]}
-      />
+      {/* Password input with toggle */}
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="password..."
+          secureTextEntry={!showPassword}
+          value={formData.password}
+          onChangeText={(text) => setFormdata({ ...formData, password: text })}
+          placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+          style={[
+            styles.passwordInput,
+            {
+              color: isDark ? Colors.dark.text : Colors.light.text,
+            },
+          ]}
+        />
+        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+          <Text
+            style={[
+              styles.eyeText,
+              { color: isDark ? Colors.dark.text : Colors.light.text },
+            ]}
+          >
+            {showPassword ? "Show" : "Hide"}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={styles.signubutton}>
         <Text style={styles.buttonText}>SignUp</Text>
       </TouchableOpacity>
@@ -175,5 +189,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "80%",
+    borderWidth: 1,
+    borderColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 16,
+  },
+
+  eyeText: {
+    fontSize: 15,
   },
 });
