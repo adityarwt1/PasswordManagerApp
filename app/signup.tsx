@@ -21,7 +21,47 @@ const signup = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsloading] = useState(false);
+  const [errors, setErrors] = useState({
+    username: "",
+    password: "",
+  });
+
   console.log(formData);
+  const handleSubmit = async () => {
+    // Reset errors
+    setErrors({ username: "", password: "" });
+
+    // Validate fields
+    let hasErrors = false;
+    const newErrors = { username: "", password: "" };
+
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required";
+      hasErrors = true;
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+      hasErrors = true;
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsloading(true);
+    try {
+    } catch (error) {
+      console.log((error as Error).message);
+    } finally {
+      setIsloading(false);
+    }
+  };
   return (
     <SafeAreaView style={styles.maindiv}>
       <Image
@@ -40,22 +80,39 @@ const signup = () => {
       <TextInput
         placeholder="username..."
         value={formData.username}
-        onChangeText={(text) => setFormdata({ ...formData, username: text })}
+        onChangeText={(text) => {
+          setFormdata({ ...formData, username: text });
+          if (errors.username) setErrors({ ...errors, username: "" }); // Clear error on typing
+        }}
         placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
         style={[
           styles.inputfield,
           {
             color: isDark ? Colors.dark.text : Colors.light.text,
+            borderColor: errors.username ? "#ef4444" : "#fff", // Red border on error
           },
         ]}
       />
+      {errors.username ? (
+        <Text style={styles.errorText}>{errors.username}</Text>
+      ) : null}
       {/* Password input with toggle */}
-      <View style={styles.passwordContainer}>
+      <View
+        style={[
+          styles.passwordContainer,
+          {
+            borderColor: errors.password ? "#ef4444" : "#fff", // Red border on error
+          },
+        ]}
+      >
         <TextInput
           placeholder="password..."
           secureTextEntry={!showPassword}
           value={formData.password}
-          onChangeText={(text) => setFormdata({ ...formData, password: text })}
+          onChangeText={(text) => {
+            setFormdata({ ...formData, password: text });
+            if (errors.password) setErrors({ ...errors, password: "" }); // Clear error on typing
+          }}
           placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
           style={[
             styles.passwordInput,
@@ -71,12 +128,21 @@ const signup = () => {
               { color: isDark ? Colors.dark.text : Colors.light.text },
             ]}
           >
-            {showPassword ? "Show" : "Hide"}
+            {showPassword ? "Hide" : "Show"}
           </Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.signubutton}>
-        <Text style={styles.buttonText}>SignUp</Text>
+      {errors.password ? (
+        <Text style={styles.errorText}>{errors.password}</Text>
+      ) : null}
+      <TouchableOpacity
+        style={styles.signubutton}
+        disabled={isLoading}
+        onPress={handleSubmit}
+      >
+        <Text style={styles.buttonText}>
+          {isLoading ? "SignUp..." : "SignUp"}
+        </Text>
       </TouchableOpacity>
 
       {/* Horizontal line with "or" text */}
@@ -206,5 +272,11 @@ const styles = StyleSheet.create({
 
   eyeText: {
     fontSize: 15,
+  },
+  errorText: {
+    color: "#ef4444",
+    fontSize: 12,
+    marginTop: -5,
+    marginBottom: 10,
   },
 });
