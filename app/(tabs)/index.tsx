@@ -51,7 +51,7 @@ const index = () => {
       const data = await getUserCredentials();
       if (data?.username) {
         const response = await fetch(
-          `https://securopass.vercel.app/api/fetchPassword?username=${data.username}`,
+          `https://securopass.vercel.app/api/fetchPassword?username=${data.username}&q=${searchQuery}`,
           {
             method: "POST",
             headers: {
@@ -211,6 +211,10 @@ const index = () => {
         await clearUserCredentials();
         router.replace("/signin"); // Redirect after logout
       };
+
+      useEffect(()=>{
+        loadUserData()
+      },[searchQuery])
   return (
     <SafeAreaView style={styles.mainview}>
       {/* Banner section */}
