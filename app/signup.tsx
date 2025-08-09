@@ -1,4 +1,5 @@
 import {
+  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -19,6 +20,10 @@ const signup = () => {
   console.log(formData);
   return (
     <SafeAreaView style={styles.maindiv}>
+      <Image
+        style={{ width: 50, height: 50 }}
+        source={require("@/assets/images/favicon.png")}
+      />
       {/* this is the tile of the sighnhp page */}
       <Text
         style={[
