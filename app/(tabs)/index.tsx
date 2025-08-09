@@ -141,6 +141,13 @@ const index = () => {
     loadUserData();
   }, []);
 
+  const handleCopyPassword = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
   return (
     <SafeAreaView style={styles.mainview}>
       {/* Banner section */}
