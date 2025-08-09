@@ -74,7 +74,6 @@ const signup = () => {
         body: JSON.stringify({ ...formData }),
       });
       const data = await response.json();
-      console.log("resonse data", data);
 
       if (response.ok) {
         await saveUserCredentials(data.user);
