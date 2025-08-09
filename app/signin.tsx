@@ -54,7 +54,7 @@ const signin = () => {
 
     setIsloading(true);
     try {
-      const signUrl = "http://10.192.205.12:3000/api/exposignin";
+      const signUrl = "https://securopass.vercel.app/api/exposignin";
       const response = await fetch(signUrl, {
         method: "POST",
         headers: {

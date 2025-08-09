@@ -65,7 +65,7 @@ const signup = () => {
         signupDate: new Date().toISOString(),
       };
 
-      const signUrl = "http://10.192.205.12:3000/api/exposignup";
+      const signUrl = "https://securopass.vercel.app/api/exposignup";
       const response = await fetch(signUrl, {
         method: "POST",
         headers: {

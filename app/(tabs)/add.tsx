@@ -89,7 +89,7 @@ const add = () => {
 
     setIsloading(true);
     try {
-      const addUrl = `http://10.192.205.12:3000/api/add?username=${userData.username}&plateform=${formData.sitename}&password=${formData.password}`;
+      const addUrl = `https://securopass.vercel.app/api/add?username=${userData.username}&plateform=${formData.sitename}&password=${formData.password}`;
       const response = await fetch(addUrl, {
         method: "POST",
         headers: {

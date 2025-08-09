@@ -47,7 +47,7 @@ const index = () => {
       const data = await getUserCredentials();
       if (data?.username) {
         const response = await fetch(
-          `http://10.192.205.12:3000/api/fetchPassword?username=${data.username}`,
+          `https://securopass.vercel.app/api/fetchPassword?username=${data.username}`,
           {
             method: "POST",
             headers: {
@@ -183,7 +183,7 @@ const index = () => {
 
   const hadleDeletePassoword = async(id: string)=>{
     try {
-      const response = await fetch("http://10.192.205.12:3000/api/delete",{
+      const response = await fetch("https://securopass.vercel.app/api/delete",{
         method: "DELETE",
         headers: {
           "Content-Type":"application/json"
@@ -281,7 +281,7 @@ const index = () => {
             style={[
               styles.sectionTitle,
               {
-                color: isDark ? "#ffffff" : "#000000",
+                color: isDark ?  "#000000": "#ffffff",
               },
             ]}
           >
