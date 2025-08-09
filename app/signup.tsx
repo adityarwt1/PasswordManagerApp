@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from "react-native";
@@ -31,7 +32,7 @@ const signup = () => {
           { color: isDark ? Colors.dark.text : Colors.light.text },
         ]}
       >
-        SecuraPass Password Manager
+        SecuraPass SignUp
       </Text>
       <TextInput
         placeholder="Enter your username..."
@@ -41,6 +42,17 @@ const signup = () => {
           { color: isDark ? Colors.dark.text : Colors.light.text },
         ]}
       />
+      <TextInput
+        placeholder="Enter your password..."
+        placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+        style={[
+          styles.inputfield,
+          { color: isDark ? Colors.dark.text : Colors.light.text },
+        ]}
+      />
+      <TouchableOpacity style={styles.signubutton}>
+        <Text style={styles.buttonText}>SignUp</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -66,5 +78,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: "80%",
     fontSize: 16,
+  },
+  signubutton: {
+    backgroundColor: "#fff",
+    padding: 12,
+    width: "80%",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
