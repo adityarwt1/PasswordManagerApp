@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
@@ -24,6 +24,10 @@ const index = () => {
         ]}
       >
         <View style={styles.titleContainer}>
+          <Image
+            source={require("@/assets/images/favicon.png")}
+            style={styles.iconStyle}
+          />
           <Text
             style={[
               styles.title,
@@ -128,5 +132,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+  },
+  iconStyle: {
+    width: 32,
+    height: 32,
+    resizeMode: "contain",
   },
 });
