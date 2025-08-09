@@ -1,28 +1,24 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  useColorScheme,
+} from "react-native";
 import React from "react";
-import { useTheme } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
 const index = () => {
-  const theme = useTheme();
-  const isDark = theme.dark ? true : false;
+  const theme = useColorScheme();
+  const isDark = theme !== "dark" ? true : false;
   const router = useRouter();
   return (
     <SafeAreaView style={styles.mainview}>
       {/* this is the bannerpage */}
-      <View
-        style={[
-          styles.tileBanner,
-          {
-            borderColor: isDark
-              ? Colors.dark.background
-              : Colors.light.background,
-            borderWidth: 2, // Set border width according to the color theme
-          },
-        ]}
-      >
+      <View style={[styles.tileBanner]}>
         <View style={styles.titleContainer}>
           <Image
             source={require("@/assets/images/favicon.png")}
@@ -31,7 +27,7 @@ const index = () => {
           <Text
             style={[
               styles.title,
-              { color: isDark ? Colors.dark.text : Colors.light.text },
+              { color: isDark ? Colors.light.text : Colors.dark.text },
             ]}
           >
             Password Manager
@@ -40,7 +36,7 @@ const index = () => {
         <Text
           style={[
             styles.text,
-            { color: isDark ? Colors.dark.text : Colors.light.text },
+            { color: isDark ? Colors.light.text : Colors.dark.text },
           ]}
         >
           Manage and secure all your passwords in one place
@@ -52,9 +48,7 @@ const index = () => {
           ]}
           onPress={() => router.push("/add")}
         >
-          <Text style={[styles.buttonText, { color: "#ffffff" }]}>
-            Add Password
-          </Text>
+          <Text style={styles.buttonText}>Add Password</Text>
         </TouchableOpacity>
       </View>
 
@@ -97,11 +91,13 @@ const styles = StyleSheet.create({
   tileBanner: {
     gap: 10,
     padding: 20,
-    flex: 1,
+    flex: 0,
     flexDirection: "column",
-    borderWidth: 1,
+    borderWidth: 0.1,
     borderColor: "#000",
     borderRadius: 8, // optional: adds rounded corners
+    height: "auto",
+    marginHorizontal: 20,
   },
   title: {
     fontSize: 30,
@@ -127,6 +123,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: "600", // font-semibold
     fontSize: 16,
+    color: "#fff",
   },
   titleContainer: {
     flexDirection: "row",
