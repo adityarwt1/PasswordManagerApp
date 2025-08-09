@@ -13,7 +13,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { getUserCredentials } from "@/utils/Credentials";
+import { clearUserCredentials, getUserCredentials } from "@/utils/Credentials";
 import * as Clipboard from "expo-clipboard";
 
 // Define the user data type
@@ -203,6 +203,10 @@ const index = () => {
       setRefreshing(false);
     }, []);
 
+      const handleLogout = async () => {
+        await clearUserCredentials();
+        router.replace("/signin"); // Redirect after logout
+      };
   return (
     <SafeAreaView style={styles.mainview}>
       {/* Banner section */}
@@ -222,7 +226,7 @@ const index = () => {
           </Text>
         </View>
 
-        {/* Show welcome message if user is logged in */}
+        {/* Welcome or description */}
         {userData ? (
           <Text
             style={[
@@ -243,6 +247,7 @@ const index = () => {
           </Text>
         )}
 
+        {/* Add Password / Get Started Button */}
         <TouchableOpacity
           style={[
             styles.addPasswordButton,
@@ -254,6 +259,19 @@ const index = () => {
             {userData ? "Add Password" : "Get Started"}
           </Text>
         </TouchableOpacity>
+
+        {/* Logout Button if logged in */}
+        {userData && (
+          <TouchableOpacity
+            style={[
+              styles.addPasswordButton,
+              { backgroundColor: "#dc2626", marginTop: 10 }, // red button
+            ]}
+            onPress={handleLogout}
+          >
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Passwords List Section */}

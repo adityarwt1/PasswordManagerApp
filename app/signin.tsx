@@ -28,7 +28,6 @@ const signin = () => {
     password: "",
   });
 
-  console.log(formData);
 
   const handleSubmit = async () => {
     // Reset errors
