@@ -1,11 +1,4 @@
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import Colors from "@/constants/Colors";
@@ -26,17 +19,20 @@ const index = () => {
             borderColor: isDark
               ? Colors.dark.background
               : Colors.light.background,
+            borderWidth: 2, // Set border width according to the color theme
           },
         ]}
       >
-        <Text
-          style={[
-            styles.title,
-            { color: isDark ? Colors.dark.text : Colors.light.text },
-          ]}
-        >
-          Password Manager
-        </Text>
+        <View style={styles.titleContainer}>
+          <Text
+            style={[
+              styles.title,
+              { color: isDark ? Colors.dark.text : Colors.light.text },
+            ]}
+          >
+            Password Manager
+          </Text>
+        </View>
         <Text
           style={[
             styles.text,
@@ -58,8 +54,26 @@ const index = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.mainview}>another div</View>
-      <View style={styles.mainview}>another div</View>
+      <View style={styles.mainview}>
+        <Text
+          style={[
+            styles.text,
+            { color: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        >
+          another div
+        </Text>
+      </View>
+      <View style={styles.mainview}>
+        <Text
+          style={[
+            styles.text,
+            { color: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        >
+          another div
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };
@@ -106,5 +120,10 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: "600", // font-semibold
     fontSize: 16,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
 });
