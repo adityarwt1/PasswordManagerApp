@@ -36,7 +36,9 @@ const index = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
   const [passwords, setPasswords] = useState<PasswordItem[]>([]);
-  const [showPasswords, setShowPasswords] = useState<{[key: string]: boolean}>({});
+  const [showPasswords, setShowPasswords] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const loadUserData = async () => {
     try {
@@ -62,9 +64,9 @@ const index = () => {
   };
 
   const togglePasswordVisibility = (id: string) => {
-    setShowPasswords(prev => ({
+    setShowPasswords((prev) => ({
       ...prev,
-      [id]: !prev[id]
+      [id]: !prev[id],
     }));
   };
 
@@ -73,36 +75,61 @@ const index = () => {
   };
 
   const renderPasswordItem = ({ item }: { item: PasswordItem }) => (
-    <View style={[styles.passwordCard, { 
-      backgroundColor: isDark ? "#1f2937" : "#f9fafb",
-      borderColor: isDark ? "#374151" : "#e5e7eb"
-    }]}>
+    <View
+      style={[
+        styles.passwordCard,
+        {
+          backgroundColor: isDark ? "#000000" : "#ffffff",
+          borderColor: isDark ? "#ffffff" : "#000000",
+        },
+      ]}
+    >
       <View style={styles.passwordHeader}>
-        <Text style={[styles.platformText, { 
-          color: isDark ? Colors.dark.text : Colors.light.text 
-        }]}>
+        <Text
+          style={[
+            styles.platformText,
+            {
+              color: isDark ? "#ffffff" : "#000000",
+            },
+          ]}
+        >
           {item.plateform}
         </Text>
-        <Text style={[styles.dateText, { 
-          color: isDark ? "#9ca3af" : "#6b7280" 
-        }]}>
+        <Text
+          style={[
+            styles.dateText,
+            {
+              color: isDark ? "#cccccc" : "#666666",
+            },
+          ]}
+        >
           {formatDate(item.createdAt)}
         </Text>
       </View>
-      
+
       <View style={styles.passwordRow}>
-        <Text style={[styles.passwordText, { 
-          color: isDark ? Colors.dark.text : Colors.light.text 
-        }]}>
+        <Text
+          style={[
+            styles.passwordText,
+            {
+              color: isDark ? "#ffffff" : "#000000",
+            },
+          ]}
+        >
           {showPasswords[item._id] ? item.password : "••••••••"}
         </Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.toggleButton}
           onPress={() => togglePasswordVisibility(item._id)}
         >
-          <Text style={[styles.toggleText, { 
-            color: isDark ? "#60a5fa" : "#3b82f6" 
-          }]}>
+          <Text
+            style={[
+              styles.toggleText,
+              {
+                color: isDark ? "#ffffff" : "#000000",
+              },
+            ]}
+          >
             {showPasswords[item._id] ? "Hide" : "Show"}
           </Text>
         </TouchableOpacity>
@@ -170,12 +197,17 @@ const index = () => {
       {/* Passwords List Section */}
       {userData && (
         <View style={styles.passwordsSection}>
-          <Text style={[styles.sectionTitle, { 
-            color: isDark ? Colors.dark.text : Colors.light.text 
-          }]}>
+          <Text
+            style={[
+              styles.sectionTitle,
+              {
+                color: isDark ? "#ffffff" : "#000000",
+              },
+            ]}
+          >
             Your Passwords ({passwords.length})
           </Text>
-          
+
           {passwords.length > 0 ? (
             <FlatList
               data={passwords}
@@ -186,14 +218,24 @@ const index = () => {
             />
           ) : (
             <View style={styles.emptyState}>
-              <Text style={[styles.emptyText, { 
-                color: isDark ? "#9ca3af" : "#6b7280" 
-              }]}>
+              <Text
+                style={[
+                  styles.emptyText,
+                  {
+                    color: isDark ? "#ffffff" : "#000000",
+                  },
+                ]}
+              >
                 No passwords saved yet
               </Text>
-              <Text style={[styles.emptySubtext, { 
-                color: isDark ? "#6b7280" : "#9ca3af" 
-              }]}>
+              <Text
+                style={[
+                  styles.emptySubtext,
+                  {
+                    color: isDark ? "#cccccc" : "#666666",
+                  },
+                ]}
+              >
                 Add your first password to get started
               </Text>
             </View>
