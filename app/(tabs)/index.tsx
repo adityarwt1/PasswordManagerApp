@@ -19,7 +19,16 @@ const index = () => {
   return (
     <SafeAreaView style={styles.mainview}>
       {/* this is the bannerpage */}
-      <View style={styles.tileBanner}>
+      <View
+        style={[
+          styles.tileBanner,
+          {
+            borderColor: isDark
+              ? Colors.dark.background
+              : Colors.light.background,
+          },
+        ]}
+      >
         <Text
           style={[
             styles.title,
@@ -36,9 +45,16 @@ const index = () => {
         >
           Manage and secure all your passwords in one place
         </Text>
-        <TouchableOpacity onPress={() => router.push("/add")}
-          >
-          Add Password
+        <TouchableOpacity
+          style={[
+            styles.addPasswordButton,
+            { backgroundColor: isDark ? "#1e293b" : "#334155" },
+          ]}
+          onPress={() => router.push("/add")}
+        >
+          <Text style={[styles.buttonText, { color: "#ffffff" }]}>
+            Add Password
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -69,5 +85,26 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: 500,
+  },
+  addPasswordButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24, // px-6
+    paddingVertical: 12, // py-3
+    borderRadius: 12, // rounded-xl
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8, // for Android shadow
+    marginTop: 20,
+  },
+  buttonText: {
+    fontWeight: "600", // font-semibold
+    fontSize: 16,
   },
 });
