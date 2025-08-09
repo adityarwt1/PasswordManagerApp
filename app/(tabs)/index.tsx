@@ -10,25 +10,49 @@ import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { getUserCredentials } from "@/utils/Credentials";
+import { clearUserCredentials, getUserCredentials } from "@/utils/Credentials";
+
+// Define the user data type
+interface UserData {
+  username: string;
+  password: string;
+  signupDate: string;
+}
 
 const index = () => {
   const theme = useColorScheme();
   const isDark = theme !== "dark" ? true : false;
   const router = useRouter();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
 
+  const fetchuserdata = async () => {
+    try {
+      const response = await fetch("http://10.192.205.12:3000/api/hello", {
+        // Replace xxx with your IP
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const loadUserData = async () => {
       try {
         const data = await getUserCredentials();
+
         setUserData(data);
         console.log("User data:", data);
+        await clearUserCredentials();
       } catch (error) {
         console.error("Error loading user data:", error);
       }
     };
-
+    fetchuserdata();
     loadUserData();
   }, []);
 
@@ -59,7 +83,7 @@ const index = () => {
               { color: isDark ? Colors.light.text : Colors.dark.text },
             ]}
           >
-            Welcome back, {userData?.username}!
+            Welcome back, {userData.username}!
           </Text>
         ) : (
           <Text
@@ -77,7 +101,7 @@ const index = () => {
             styles.addPasswordButton,
             { backgroundColor: isDark ? "#334155" : "#1e293b" },
           ]}
-          onPress={() => router.push(userData ? "/add" : "/signup")}
+          onPress={() => router.push("/signup")}
         >
           <Text style={styles.buttonText}>
             {userData ? "Add Password" : "Get Started"}

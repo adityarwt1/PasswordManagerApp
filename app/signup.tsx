@@ -65,9 +65,19 @@ const signup = () => {
         signupDate: new Date().toISOString(),
       };
 
-      const success = await saveUserCredentials(userData);
+      const signUrl = "http://10.192.205.12:3000/api/exposignup";
+      const response = await fetch(signUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...formData }),
+      });
+      const data = await response.json();
+      console.log("resonse data", data);
 
-      if (success) {
+      if (response.ok) {
+        await saveUserCredentials(data.user);
         console.log("User registered and saved successfully!");
         router.push("/(tabs)");
       } else {
