@@ -8,6 +8,7 @@ import {
   RefreshControl,
   FlatList,
   Button,
+  TextInput,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -15,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { clearUserCredentials, getUserCredentials } from "@/utils/Credentials";
 import * as Clipboard from "expo-clipboard";
+import { Ionicons } from "@expo/vector-icons";
 
 // Define the user data type
 interface UserData {
@@ -42,6 +44,8 @@ const index = () => {
     [key: string]: boolean;
   }>({});
    const [refreshing, setRefreshing] = useState(false);
+   const [searchQuery, setSearchQuery] = useState("");
+
   const loadUserData = async () => {
     try {
       const data = await getUserCredentials();
@@ -275,13 +279,23 @@ const index = () => {
       </View>
 
       {/* Passwords List Section */}
+      <View style={styles.container}>
+        <Ionicons name="search" size={20} color="#888" style={styles.icon} />
+        <TextInput
+          style={styles.input}
+          placeholder="Search..."
+          placeholderTextColor="#888"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
       {userData && (
         <View style={styles.passwordsSection}>
           <Text
             style={[
               styles.sectionTitle,
               {
-                color: isDark ?  "#000000": "#ffffff",
+                color: isDark ? "#000000" : "#ffffff",
               },
             ]}
           >
@@ -452,5 +466,21 @@ const styles = StyleSheet.create({
   emptySubtext: {
     fontSize: 14,
     textAlign: "center",
+  },
+  container: {
+    flexDirection: "row",
+    marginHorizontal: 20,
+    alignItems: "center",
+    backgroundColor: "#f1f1f1",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
   },
 });
