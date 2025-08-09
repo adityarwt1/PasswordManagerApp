@@ -6,15 +6,32 @@ import {
   Image,
   useColorScheme,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { getUserCredentials } from "@/utils/Credentials";
 
 const index = () => {
   const theme = useColorScheme();
   const isDark = theme !== "dark" ? true : false;
   const router = useRouter();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const data = await getUserCredentials();
+        setUserData(data);
+        console.log("User data:", data);
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.mainview}>
       {/* this is the bannerpage */}
@@ -33,22 +50,38 @@ const index = () => {
             Password Manager
           </Text>
         </View>
-        <Text
-          style={[
-            styles.text,
-            { color: isDark ? Colors.light.text : Colors.dark.text },
-          ]}
-        >
-          Manage and secure all your passwords in one place
-        </Text>
+
+        {/* Show welcome message if user is logged in */}
+        {userData ? (
+          <Text
+            style={[
+              styles.welcomeText,
+              { color: isDark ? Colors.light.text : Colors.dark.text },
+            ]}
+          >
+            Welcome back, {userData?.username}!
+          </Text>
+        ) : (
+          <Text
+            style={[
+              styles.text,
+              { color: isDark ? Colors.light.text : Colors.dark.text },
+            ]}
+          >
+            Manage and secure all your passwords in one place
+          </Text>
+        )}
+
         <TouchableOpacity
           style={[
             styles.addPasswordButton,
             { backgroundColor: isDark ? "#334155" : "#1e293b" },
           ]}
-          onPress={() => router.push("/signup")}
+          onPress={() => router.push(userData ? "/add" : "/signup")}
         >
-          <Text style={styles.buttonText}>Add Password</Text>
+          <Text style={styles.buttonText}>
+            {userData ? "Add Password" : "Get Started"}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -134,5 +167,10 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     resizeMode: "contain",
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontWeight: "500",
+    textAlign: "center",
   },
 });

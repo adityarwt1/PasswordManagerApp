@@ -11,6 +11,8 @@ import {
 import React, { useState } from "react";
 import Colors from "@/constants/Colors";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { saveUserCredentials } from "@/utils/Credentials";
 
 const signup = () => {
   const theme = useColorScheme();
@@ -56,8 +58,24 @@ const signup = () => {
 
     setIsloading(true);
     try {
+      // Save credentials using utility function
+      const userData = {
+        username: formData.username,
+        password: formData.password, // Note: In production, never store raw passwords!
+        signupDate: new Date().toISOString(),
+      };
+
+      const success = await saveUserCredentials(userData);
+
+      if (success) {
+        console.log("User registered and saved successfully!");
+        router.push("/(tabs)");
+      } else {
+        console.log("Failed to save user credentials");
+      }
     } catch (error) {
-      console.log((error as Error).message);
+      console.log("Error saving credentials:", (error as Error).message);
+      // You might want to show an error message to the user
     } finally {
       setIsloading(false);
     }
