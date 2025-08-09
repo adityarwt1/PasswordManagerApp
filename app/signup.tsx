@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Colors from "@/constants/Colors";
+import { useRouter } from "expo-router";
 
 const signup = () => {
   const theme = useColorScheme();
   const isDark = theme === "dark";
+  const router = useRouter();
   const [formData, setFormdata] = useState({
     username: "",
     password: "",
@@ -39,7 +41,10 @@ const signup = () => {
         placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
         style={[
           styles.inputfield,
-          { color: isDark ? Colors.dark.text : Colors.light.text },
+          {
+            color: isDark ? Colors.dark.text : Colors.light.text,
+            paddingVertical: 15,
+          },
         ]}
       />
       <TextInput
@@ -52,6 +57,48 @@ const signup = () => {
       />
       <TouchableOpacity style={styles.signubutton}>
         <Text style={styles.buttonText}>SignUp</Text>
+      </TouchableOpacity>
+
+      {/* Horizontal line with "or" text */}
+      <View style={styles.orContainer}>
+        <View
+          style={[
+            styles.line,
+            { backgroundColor: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        />
+        <Text
+          style={[
+            styles.orText,
+            { color: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        >
+          or
+        </Text>
+        <View
+          style={[
+            styles.line,
+            { backgroundColor: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        />
+      </View>
+
+      {/* Sign In button */}
+      <TouchableOpacity
+        style={[
+          styles.signinButton,
+          { borderColor: isDark ? Colors.dark.text : Colors.light.text },
+        ]}
+        onPress={() => router.push("/signin")}
+      >
+        <Text
+          style={[
+            styles.signinButtonText,
+            { color: isDark ? Colors.dark.text : Colors.light.text },
+          ]}
+        >
+          Sign In
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -89,6 +136,36 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  orContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 15,
+    width: "80%",
+  },
+  line: {
+    flex: 1,
+    height: 1,
+  },
+  orText: {
+    marginHorizontal: 10,
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  signinButton: {
+    backgroundColor: "transparent",
+    padding: 12,
+    width: "80%",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  signinButtonText: {
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
