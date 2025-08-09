@@ -37,22 +37,28 @@ const signup = () => {
         SecuraPass SignUp
       </Text>
       <TextInput
-        placeholder="Enter your username..."
+        placeholder="username..."
+        value={formData.username}
+        onChangeText={(text) => setFormdata({ ...formData, username: text })}
         placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
         style={[
           styles.inputfield,
           {
             color: isDark ? Colors.dark.text : Colors.light.text,
-            paddingVertical: 15,
           },
         ]}
       />
       <TextInput
-        placeholder="Enter your password..."
+        placeholder="password..."
+        secureTextEntry={true}
+        value={formData.password}
+        onChangeText={(text) => setFormdata({ ...formData, password: text })}
         placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
         style={[
           styles.inputfield,
-          { color: isDark ? Colors.dark.text : Colors.light.text },
+          {
+            color: isDark ? Colors.dark.text : Colors.light.text,
+          },
         ]}
       />
       <TouchableOpacity style={styles.signubutton}>
