@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   Image,
   useColorScheme,
+  ScrollView,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
@@ -19,32 +21,94 @@ interface UserData {
   signupDate: string;
 }
 
+// Define the password object type
+interface PasswordItem {
+  _id: string;
+  createdAt: string;
+  password: string;
+  plateform: string;
+  updatedAt: string;
+}
+
 const index = () => {
   const theme = useColorScheme();
   const isDark = theme !== "dark" ? true : false;
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [passwords, setPasswords] = useState<PasswordItem[]>([]);
+  const [showPasswords, setShowPasswords] = useState<{[key: string]: boolean}>({});
 
   const loadUserData = async () => {
     try {
       const data = await getUserCredentials();
-      const response = await fetch(
-        `http://10.192.205.12:3000/api/fetchPassword?username=${data?.username}`,
-        {
-          // Replace xxx with your IP
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const dataresponse = await response.json();
-      console.log(dataresponse);
-      setUserData(data);
+      if (data?.username) {
+        const response = await fetch(
+          `http://10.192.205.12:3000/api/fetchPassword?username=${data.username}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const dataresponse = await response.json();
+        setPasswords(dataresponse.passwords || []);
+        setUserData(data);
+        console.log("Passwords fetched:", dataresponse.passwords);
+      }
     } catch (error) {
       console.error("Error loading user data:", error);
     }
   };
+
+  const togglePasswordVisibility = (id: string) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const renderPasswordItem = ({ item }: { item: PasswordItem }) => (
+    <View style={[styles.passwordCard, { 
+      backgroundColor: isDark ? "#1f2937" : "#f9fafb",
+      borderColor: isDark ? "#374151" : "#e5e7eb"
+    }]}>
+      <View style={styles.passwordHeader}>
+        <Text style={[styles.platformText, { 
+          color: isDark ? Colors.dark.text : Colors.light.text 
+        }]}>
+          {item.plateform}
+        </Text>
+        <Text style={[styles.dateText, { 
+          color: isDark ? "#9ca3af" : "#6b7280" 
+        }]}>
+          {formatDate(item.createdAt)}
+        </Text>
+      </View>
+      
+      <View style={styles.passwordRow}>
+        <Text style={[styles.passwordText, { 
+          color: isDark ? Colors.dark.text : Colors.light.text 
+        }]}>
+          {showPasswords[item._id] ? item.password : "••••••••"}
+        </Text>
+        <TouchableOpacity 
+          style={styles.toggleButton}
+          onPress={() => togglePasswordVisibility(item._id)}
+        >
+          <Text style={[styles.toggleText, { 
+            color: isDark ? "#60a5fa" : "#3b82f6" 
+          }]}>
+            {showPasswords[item._id] ? "Hide" : "Show"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   useEffect(() => {
     loadUserData();
@@ -52,7 +116,7 @@ const index = () => {
 
   return (
     <SafeAreaView style={styles.mainview}>
-      {/* this is the bannerpage */}
+      {/* Banner section */}
       <View style={[styles.tileBanner]}>
         <View style={styles.titleContainer}>
           <Image
@@ -103,26 +167,39 @@ const index = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.mainview}>
-        <Text
-          style={[
-            styles.text,
-            { color: isDark ? Colors.dark.text : Colors.light.text },
-          ]}
-        >
-          another div
-        </Text>
-      </View>
-      <View style={styles.mainview}>
-        <Text
-          style={[
-            styles.text,
-            { color: isDark ? Colors.dark.text : Colors.light.text },
-          ]}
-        >
-          another div
-        </Text>
-      </View>
+      {/* Passwords List Section */}
+      {userData && (
+        <View style={styles.passwordsSection}>
+          <Text style={[styles.sectionTitle, { 
+            color: isDark ? Colors.dark.text : Colors.light.text 
+          }]}>
+            Your Passwords ({passwords.length})
+          </Text>
+          
+          {passwords.length > 0 ? (
+            <FlatList
+              data={passwords}
+              renderItem={renderPasswordItem}
+              keyExtractor={(item) => item._id}
+              style={styles.passwordsList}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={[styles.emptyText, { 
+                color: isDark ? "#9ca3af" : "#6b7280" 
+              }]}>
+                No passwords saved yet
+              </Text>
+              <Text style={[styles.emptySubtext, { 
+                color: isDark ? "#6b7280" : "#9ca3af" 
+              }]}>
+                Add your first password to get started
+              </Text>
+            </View>
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -132,8 +209,6 @@ export default index;
 const styles = StyleSheet.create({
   mainview: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   text: {
     fontSize: 20,
@@ -142,13 +217,12 @@ const styles = StyleSheet.create({
   tileBanner: {
     gap: 10,
     padding: 20,
-    flex: 0,
     flexDirection: "column",
     borderWidth: 0.1,
     borderColor: "#000",
-    borderRadius: 8, // optional: adds rounded corners
-    height: "auto",
+    borderRadius: 8,
     marginHorizontal: 20,
+    marginTop: 10,
   },
   title: {
     fontSize: 30,
@@ -158,9 +232,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 24, // px-6
-    paddingVertical: 12, // py-3
-    borderRadius: 12, // rounded-xl
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -168,11 +242,11 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 8, // for Android shadow
+    elevation: 8,
     marginTop: 20,
   },
   buttonText: {
-    fontWeight: "600", // font-semibold
+    fontWeight: "600",
     fontSize: 16,
     color: "#fff",
   },
@@ -189,6 +263,69 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 18,
     fontWeight: "500",
+    textAlign: "center",
+  },
+  passwordsSection: {
+    flex: 1,
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 15,
+  },
+  passwordsList: {
+    flex: 1,
+  },
+  passwordCard: {
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+  passwordHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  platformText: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  dateText: {
+    fontSize: 12,
+  },
+  passwordRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  passwordText: {
+    fontSize: 14,
+    fontFamily: "monospace",
+    flex: 1,
+  },
+  toggleButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  toggleText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 5,
+  },
+  emptySubtext: {
+    fontSize: 14,
     textAlign: "center",
   },
 });
